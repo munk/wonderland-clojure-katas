@@ -28,15 +28,20 @@
     (cond (> p1-rank p2-rank) [prize []]
           (> p2-rank p1-rank) [[] prize]
           (> p1-suit p2-suit) [prize []]
-          true [[] prize])))
+          :else [[] prize])))
+
+(defn merge-cards [hand prize]
+  (cond (empty? prize) hand
+        :else (into hand prize)))
 
 (defn play-game [player1-cards player2-cards]
   (cond (empty? player1-cards) :player-2
         (empty? player2-cards) :player-1
-        true (let [c1 (first player1-cards)
-                   c2 (first player2-cards)
-                   c1' (rest player1-cards)
-                   c2' (rest player2-cards)
-                   [p1 p2] (play-round c1 c2)]
-               (println player1-cards player2-cards)
-               (recur (into c1' [p1]) (into c2' [c2])))))
+        :else (let [p1-card (first player1-cards)
+                    p2-card (first player2-cards)
+                    p1-hand (into [] (rest player1-cards))
+                    p2-hand (into [] (rest player2-cards))
+                    [p1-prize p2-prize] (play-round p1-card p2-card)]
+                (println "Result: " p1-prize p2-prize)
+                (recur (merge-cards p1-hand p1-prize)
+                       (merge-cards p2-hand p2-prize)))))

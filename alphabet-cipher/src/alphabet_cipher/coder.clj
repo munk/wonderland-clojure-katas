@@ -2,9 +2,9 @@
 
 (def alphabet (cycle "abcdefghijklmnopqrstuvwxyz"))
 
-(defn cipher-row 
-  [n] 
-  (take 26 
+(defn cipher-row
+  [n]
+  (take 26
         (drop n alphabet)))
 
 (defn lookup [s b]
@@ -17,9 +17,9 @@
   (let [alpha (cipher-row 0)
         idx-s (.indexOf alpha s)
         idx-b (.indexOf alpha b)
-        row (cipher-row idx-s) 
+        row (cipher-row idx-s)
         chr (nth alpha idx-b)]
-    (nth alphabet 
+    (nth alphabet
          (first (filter #(= chr (nth row %))
                         (range 26))))))
 
@@ -40,4 +40,3 @@
         (if (= message (decode sk cypher))
           sk
           (recur (inc ct)))))))
-      
